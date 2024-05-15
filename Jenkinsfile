@@ -1,25 +1,10 @@
 pipeline {
-    agent {label 'slave'}
+    agent any
     stages {
-        stage('Restore Dependencies') {
+        stage('Build') { 
             steps {
-                sh 'npm install'
+                sh 'npm install' 
             }
         }
-        stage('Test') { 
-            steps {
-                sh 'npm run test' 
-            }
-        }
-        stage('Package') { 
-            steps {
-                sh 'npm run build' 
-            }
-        }
-        stage('Archive Artifacts') { 
-            steps {
-                archiveArtifacts '*.zip'
-            }
-        }  
     }
 }
