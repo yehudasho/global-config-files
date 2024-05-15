@@ -1,12 +1,7 @@
 pipeline {
     agent {label 'slave'}
     stages {
-        stage('Get Sources') {
-            steps {
-                git 'https://gitlab.com/sela-devops/courses/jenkins-cicd/demo-app.git'
-            }
-        }
-      stage('Restore Dependencies') {
+        stage('Restore Dependencies') {
             steps {
                 sh 'npm install'
             }
