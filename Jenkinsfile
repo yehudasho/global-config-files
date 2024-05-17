@@ -1,21 +1,30 @@
 pipeline {
-    agent any
-
+    agent {label 'slave'}
     stages {
-        stage('Build') {
+        stage('Get Sources') {
             steps {
-                echo 'Building..'
+                git 'https://gitlab.com/sela-devops/courses/jenkins-cicd/demo-app.git'
             }
         }
-        stage('Test') {
+      stage('Restore Dependencies') {
             steps {
-                echo 'Testing..'
+                sh 'npm install'
             }
         }
-        stage('Deploy') {
+        stage('Test') { 
             steps {
-                echo 'Deploying....'
+                sh 'npm run test' 
             }
         }
+        stage('Package') { 
+            steps {
+                sh 'npm run build' 
+            }
+        }
+        stage('Archive Artifacts') { 
+            steps {
+                archiveArtifacts '*.zip'
+            }
+        }  
     }
 }
