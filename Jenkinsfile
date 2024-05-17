@@ -8,7 +8,7 @@ pipeline {
         }
       stage('Restore Dependencies') {
             steps {
-                sh 'npm install'
+                sh '/usr/bin/npm install'
             }
         }
         stage('Test') { 
