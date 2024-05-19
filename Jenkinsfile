@@ -3,12 +3,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
+                sh '/usr/local/bin/node -v'
             }
         }
         stage('Test') { 
             steps {
-                sh '/usr/local/bin/node -v' 
+                sh './jenkins/scripts/test.sh'
             }
         }
     }
