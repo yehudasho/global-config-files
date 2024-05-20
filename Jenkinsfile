@@ -10,7 +10,7 @@ pipeline {
 
                     def index = commitMessage.indexOf(' ')
 
-                    def issueKey = commitMessage.substring(0, index)
+                    def issueKey = "jir-1"
 
                     if (issueKey) {
                         // Define the new status
