@@ -18,7 +18,7 @@ pipeline {
                 script {
                     def commitMessage = sh(script: "git log --format=%B -n 1 HEAD", returnStdout: true).trim()
 
-                    def index = commitMessage.indexOf(' ')
+                    //def index = commitMessage.indexOf(' ')
 
                     def issueKey="JIR-1"
 
