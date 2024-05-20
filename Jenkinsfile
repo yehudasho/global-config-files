@@ -11,5 +11,10 @@ pipeline {
                 sh 'echo my first jenkinsfile'
             }
         }
+        stage('Jira') { 
+            steps {
+                sh 'echo Jira Integrated'
+            }
+        }
     }
 }
