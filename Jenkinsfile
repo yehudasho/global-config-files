@@ -18,6 +18,36 @@ pipeline {
             }
         }
         stage('Jira') { 
+
+
+
+
+steps {
+                withCredentials([usernamePassword(credentialsId: 'jira-jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
+                    script {
+                        def response = sh (
+                            script: """
+                                curl -u $JIRA_EMAIL:$JIRA_API_TOKEN -X GET -H "Content-Type: application/json" $JIRA_URL/rest/api/3/priority
+                            """,
+                            returnStdout: true
+                        ).trim()
+
+                        def priorities = new groovy.json.JsonSlurper().parseText(response)
+                        def priorityId = priorities.find { it.name == PRIORITY_NAME }?.id
+
+                        if (!priorityId) {
+                            error "Priority '${PRIORITY_NAME}' not found"
+                        }
+
+                        env.PRIORITY_ID = priorityId
+                    }
+                }
+            }
+
+
+
+
+            
             steps {
                 sh 'echo create new jira issue'
 
