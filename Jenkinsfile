@@ -38,6 +38,21 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         sh """
                         curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
+
+                        // HTTP request to Jira API to create a new issue
+                    def response = httpRequest(
+                        url: "${env.JIRA_API_URL}/issue",
+                        httpMode: 'POST',
+                        contentType: 'APPLICATION_JSON',
+                        requestBody: payload,
+                        customHeaders: [
+                            [name: 'Authorization', value: "Basic ${authString}"],
+                            [name: 'Content-Type', value: 'application/json']
+                        ]
+                    )
+
+                    def jsonResponse = readJSON text: response.content
+                    echo "Created Jira issue: ${jsonResponse.key} - ${jsonResponse.fields.summary}"
                         
                         // Clean up the temporary file
                         sh 'rm transition.json'
