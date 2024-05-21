@@ -57,6 +57,7 @@ pipeline {
             when {
                 expression {
                     return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
+                    echo 'yehuda1 ${env.PROJECT_KEY}'
                 }
             }
             steps {
