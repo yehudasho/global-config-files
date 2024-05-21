@@ -38,6 +38,19 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         sh """
                         curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
+
+println "All Transitions: ${transitions}"
+
+    for (transition in transitions.transitions) {
+        println "Transition: ${transition}"
+        if (transition.to.name == statusName) {
+            return transition.id
+        }
+    }
+
+
+
+
                         
                         // Clean up the temporary file
                         sh 'rm transition.json'
