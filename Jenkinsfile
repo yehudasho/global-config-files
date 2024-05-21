@@ -42,6 +42,11 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                 }
             }
         }
+        stage('Update Status') {
+            steps {
+sh 'echo create new jira issue Status'
+            }
+        }
     }
     post {
         success {
