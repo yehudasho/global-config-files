@@ -1,113 +1,54 @@
+import groovy.json.JsonSlurper
+
 pipeline {
     agent any
-    environment {
-        JIRA_URL = 'http://172.17.0.3:8080'  // Your Jira URL
-        ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
-        TRANSITION_ID = 'JIR-2'  // The ID of the transition
-        PROJECT_KEY = "${params.PROJECT_KEY}"
-         SUMMARY = "${params.SUMMARY}"
-    }
+
     stages {
-        stage('Build') {
-            steps {
-                sh '/usr/local/bin/node -v'
-            }
-        }
-        stage('Test') { 
-            steps {
-                sh 'echo my first jenkinsfile'
-            }
-        }
-        stage('Jira') { 
-            steps {
-                sh 'echo create new jira issue'
-
-
-withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
-                    script {
-                        def payload = """
-                        {
-                          "transition": {
-                            "id": "${TRANSITION_ID}"
-                          }
-                        }
-                        """
-
-                        // Write the payload to a temporary file
-                        writeFile file: 'transition.json', text: payload
-
-                        // Execute the curl command to transition the Jira issue
-                        sh """
-                        curl -u jira:jira -X POST --data @transition.json -H "Content-Type: application/json" http://172.17.0.3:8080/rest/api/3/issue/$ISSUE_KEY/transitions
-                        """
-                        
-                        // Clean up the temporary file
-                        sh 'rm transition.json'
-                    }
-                }
-
-                sh 'echo yehuda1'
-                when {
-                expression {
-                   return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
-                }
-            }
+        stage('Update Status') {
             steps {
                 script {
-                    echo "Creating a new Jira issue in project ${env.PROJECT_KEY}"
+                    def commitMessage = sh(script: "git log --format=%B -n 1 HEAD", returnStdout: true).trim()
 
-                    // Extract username and password from the credentials
-                    def jiraUsername = env.jira
-                    def jiraPassword = env.jira
+                    def index = commitMessage.indexOf(' ')
 
-                    // Base64 encode the username and password for basic authentication
-                    def authString = "jira:jira".bytes.encodeBase64().toString()
+                    def issueKey = commitMessage.substring(0, index)
 
-                    // Construct the JSON payload for creating the Jira issue
-                    def payload = """
-                    {
-                        "fields": {
-                            "project": {
-                                "key": "${env.PROJECT_KEY}"
-                            },
-                            "issuetype": {
-                                "name": "${env.ISSUE_TYPE}"
-                            },
-                            "summary": "${env.SUMMARY}",
-                            "description": "${env.DESCRIPTION}",
-                            "priority": {
-                                "name": "${env.PRIORITY}"
-                            }
+                    if (issueKey) {
+                        // Define the new status
+                        def newStatus = "Done"
+                        
+                        // Update status using REST API
+                        def transitionId = getTransitionId(issueKey, newStatus)
+                        println "Transition ID for ${newStatus}: ${transitionId}"
+
+                        if (transitionId != null) {
+                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
+                            println "Response: ${response}"
+                        } else {
+                            println "Transition ID not found for ${newStatus}."
                         }
+                    } else {
+                        println "Issue key not found in commit message."
                     }
-                    """
-
-                    // Example: HTTP request to Jira API to create a new issue
-                    def response = httpRequest(
-                        url: "${env.JIRA_API_URL}/issue",
-                        httpMode: 'POST',
-                        contentType: 'APPLICATION_JSON',
-                        requestBody: payload,
-                        customHeaders: [
-                            [name: 'Authorization', value: "Basic ${authString}"],
-                            [name: 'Content-Type', value: 'application/json']
-                        ]
-                    )
-
-                    def jsonResponse = readJSON text: response.content
-                    echo "Created Jira issue: ${jsonResponse.key} - ${jsonResponse.fields.summary}"
                 }
-            }  
             }
         }
     }
+}
 
-    post {
-        success {
-            echo "Jira issue ${ISSUE_KEY} transitioned successfully."
-        }
-        failure {
-            echo "Failed to transition Jira issue ${ISSUE_KEY}."
+def getTransitionId(issueKey, statusName) {
+    def response = sh(script: "curl -u jira:jira -X GET -H 'Content-Type: application/json' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true).trim()
+    def jsonSlurper = new JsonSlurper()
+    def transitions = jsonSlurper.parseText(response)
+
+    println "All Transitions: ${transitions}"
+
+    for (transition in transitions.transitions) {
+        println "Transition: ${transition}"
+        if (transition.to.name == statusName) {
+            return transition.id
         }
     }
+
+    return null
 }
