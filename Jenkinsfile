@@ -44,6 +44,13 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                     }
                 }
             }
+            }
+            stage('Create Test Jira Issue') {
+            when {
+                expression {
+                    return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
+                }
+            }
         }
     }
 
