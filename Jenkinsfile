@@ -27,7 +27,7 @@ pipeline {
                   def jiraPassword = env.JIRA_PASSWORD
 
                     // Base64 encode the username and password for basic authentication
-                    def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
+                   // def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
 
                     // Construct the JSON payload for creating the Jira issue
                     def payload = """
