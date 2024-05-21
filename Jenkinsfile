@@ -17,6 +17,11 @@ pipeline {
                 sh 'echo my first jenkinsfile'
             }
         }
+        stage('Jira Get Priority ID') { 
+            steps {
+                sh 'echo first Jira step'
+            }
+        }
     }
 }
 
