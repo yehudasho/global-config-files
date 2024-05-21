@@ -4,7 +4,7 @@ pipeline {
         JIRA_URL = 'http://172.17.0.3:8080'  // Your Jira URL
         //ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
         ISSUE_KEY = 'JIR-2'  // The key of the Jira issue to transition
-        PRIORITY_ID = 'High'
+        PRIORITY_NAME = 'High'
     }
     stages {
         stage('Build') {
@@ -50,10 +50,10 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
 
     post {
         success {
-            echo "Jira issue ${ISSUE_KEY} transitioned successfully."
+            echo "Jira issue ${ISSUE_KEY} priority updated to ${PRIORITY_NAME} successfully."
         }
         failure {
-            echo "Failed to transition Jira issue ${ISSUE_KEY}."
+            echo "Failed to update priority of Jira issue ${ISSUE_KEY}."
         }
     }
 }
