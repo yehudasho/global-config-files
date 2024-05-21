@@ -38,6 +38,7 @@ pipeline {
                         }
 
                         env.PRIORITY_ID = priorityId
+                        sh 'echo yehuda1 ${PRIORITY_NAME}'
                     }
                 }
             }
