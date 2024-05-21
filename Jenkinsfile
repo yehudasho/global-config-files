@@ -31,7 +31,7 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                           }
                         }
                         """
-
+def getTransitionId(issueKey, statusName) {
                         // Write the payload to a temporary file
                         writeFile file: 'transition.json', text: payload
 
@@ -50,7 +50,8 @@ println "All Transitions: ${transitions}"
         }
     }
 
-
+    return null
+}
 
 
                         
