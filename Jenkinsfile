@@ -52,7 +52,52 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                    return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
                 }
             }
-                
+            steps {
+                script {
+                    echo "Creating a new Jira issue in project ${env.PROJECT_KEY}"
+
+                    // Extract username and password from the credentials
+                    def jiraUsername = env.jira
+                    def jiraPassword = env.jira
+
+                    // Base64 encode the username and password for basic authentication
+                    def authString = "jira:jira".bytes.encodeBase64().toString()
+
+                    // Construct the JSON payload for creating the Jira issue
+                    def payload = """
+                    {
+                        "fields": {
+                            "project": {
+                                "key": "${env.PROJECT_KEY}"
+                            },
+                            "issuetype": {
+                                "name": "${env.ISSUE_TYPE}"
+                            },
+                            "summary": "${env.SUMMARY}",
+                            "description": "${env.DESCRIPTION}",
+                            "priority": {
+                                "name": "${env.PRIORITY}"
+                            }
+                        }
+                    }
+                    """
+
+                    // Example: HTTP request to Jira API to create a new issue
+                    def response = httpRequest(
+                        url: "${env.JIRA_API_URL}/issue",
+                        httpMode: 'POST',
+                        contentType: 'APPLICATION_JSON',
+                        requestBody: payload,
+                        customHeaders: [
+                            [name: 'Authorization', value: "Basic ${authString}"],
+                            [name: 'Content-Type', value: 'application/json']
+                        ]
+                    )
+
+                    def jsonResponse = readJSON text: response.content
+                    echo "Created Jira issue: ${jsonResponse.key} - ${jsonResponse.fields.summary}"
+                }
+            }  
             }
         }
     }
