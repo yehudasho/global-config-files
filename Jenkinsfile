@@ -43,6 +43,14 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         sh 'rm transition.json'
                     }
                 }
+
+                sh 'echo yehuda1'
+                when {
+                expression {
+                    return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
+                }
+            }
+                
             }
         }
     }
