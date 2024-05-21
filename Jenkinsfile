@@ -22,8 +22,7 @@ pipeline {
                 sh 'echo create new jira issue'
                 jiraNewIssue site: "${JIRA_SITE}", projectKey: "${JIRA_PROJECT_KEY}", summary: "${ISSUE_SUMMARY}", description: "${ISSUE_DESCRIPTION}", type: 'Task'
             }
-        }
-        post {
+            post {
         success {
             echo "Jira issue created successfully."
         }
@@ -31,5 +30,7 @@ pipeline {
             echo "Failed to create Jira issue."
         }
     }
+        }
+        
 }
 }
