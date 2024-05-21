@@ -21,7 +21,7 @@ pipeline {
                         def transitionId = getTransitionId(issueKey, newStatus)
                         println "Transition ID for ${newStatus}: ${transitionId}"
 
-                        if (transitionId != null) {
+                        if (transitionId == null) {
                             def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
                             println "Response: ${response}"
                             println "yehuda1 ${transitionId}"
