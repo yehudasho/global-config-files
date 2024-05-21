@@ -21,6 +21,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
                 script {
+                    sh """
+                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        """
                     echo "Creating a new Jira issue in project ${params.PROJECT_KEY}"
 
                     // Extract username and password from the credentials
