@@ -13,7 +13,7 @@ pipeline {
     // Set environment variables
     environment {
         JIRA_API_URL = 'http://172.17.0.3:8080/rest/api/2'
-        JIRA_CREDENTIALS = credentials('jira-credentials')  // Use Jenkins credentials for Jira username and password
+        JIRA_CREDENTIALS = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
     }
 
     stages {
