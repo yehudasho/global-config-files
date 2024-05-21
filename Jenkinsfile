@@ -23,8 +23,8 @@ pipeline {
                     echo "Creating a new Jira issue in project ${params.PROJECT_KEY}"
 
                     // Extract username and password from the credentials
-                    def jiraUsername = 'jira'
-                    def jiraPassword = 'jira'
+                 def jiraCredentials = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
+                 def jiraUsername = jiraCredentials.username
 
                     // Base64 encode the username and password for basic authentication
                     def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
