@@ -39,7 +39,8 @@ pipeline {
                         env.PRIORITY_ID = priorityId
                     }
                 }
-
+            }
+        }
         stage('Change Jira Issue Priority') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
@@ -68,7 +69,7 @@ pipeline {
                 }
             }
         }
-
+    }
  post {
         success {
             echo "Jira issue ${ISSUE_KEY} priority updated to ${PRIORITY_NAME} successfully."
