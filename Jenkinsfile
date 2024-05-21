@@ -45,11 +45,11 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                 }
 
                 sh 'echo yehuda1'
-                when {
-                expression {
-                    return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
-                }
-            }
+                //when {
+               // expression {
+                 //   return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
+                //}
+            //}
                 
             }
         }
