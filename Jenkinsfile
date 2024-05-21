@@ -17,10 +17,8 @@ pipeline {
         SUMMARY = "${params.SUMMARY}"
         DESCRIPTION = "${params.DESCRIPTION}"
         PRIORITY = "${params.PRIORITY}"
-        //JIRA_API_URL = 'http://172.17.0.3:8080/rest/api/2'
-        JIRA_API_URL = 'http://172.17.0.3:8080'
-        //JIRA_AUTH_TOKEN = credentials('jira_cred')  // Use Jenkins credentials for Jira authentication
-        JIRA_AUTH_TOKEN = 'jira_cred'
+        JIRA_API_URL = 'http://172.17.0.3:8080/rest/api/2'
+        JIRA_CREDENTIALS = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
     }
 
     stages {
@@ -59,11 +57,18 @@ pipeline {
             when {
                 expression {
                     return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
-                   }
+                }
             }
             steps {
                 script {
                     echo "Creating a new Jira issue in project ${env.PROJECT_KEY}"
+
+                    // Extract username and password from the credentials
+                    def jiraUsername = env.jira
+                    def jiraPassword = env.jira
+
+                    // Base64 encode the username and password for basic authentication
+                    def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
 
                     // Construct the JSON payload for creating the Jira issue
                     def payload = """
@@ -91,7 +96,7 @@ pipeline {
                         contentType: 'APPLICATION_JSON',
                         requestBody: payload,
                         customHeaders: [
-                            [name: 'Authorization', value: "Basic ${env.JIRA_AUTH_TOKEN}"],
+                            [name: 'Authorization', value: "Basic ${authString}"],
                             [name: 'Content-Type', value: 'application/json']
                         ]
                     )
