@@ -77,9 +77,9 @@ sh 'echo create new jira issue Status'
 }
             }
         }
-    }
+    
  
-}
+
 def getTransitionId(issueKey, statusName) {
     // Execute the curl command to transition the Jira issue
                         sh """
