@@ -21,7 +21,7 @@ pipeline {
             steps {
                 sh 'echo create new jira issue'
                 // jiraNewIssue site: "${JIRA_SITE}", projectKey: "${JIRA_PROJECT_KEY}", summary: "${ISSUE_SUMMARY}", description: "${ISSUE_DESCRIPTION}", type: 'Task'
-                withCredentials([string(credentialsId: 'jira', variable: 'JIRA_API_TOKEN'),
+                withCredentials([string(credentialsId: 'jira_cred', variable: 'JIRA_API_TOKEN'),
                                  string(credentialsId: 'jira-email', variable: 'JIRA_EMAIL')]) {
                     script {
                         def response = jiraNewIssue site: JIRA_SITE,
