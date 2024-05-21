@@ -4,6 +4,7 @@ pipeline {
         JIRA_URL = 'http://172.17.0.3:8080'  // Your Jira URL
         ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
         TRANSITION_ID = 'JIR-2'  // The ID of the transition
+        PROJECT_KEY = "${params.PROJECT_KEY}"
     }
     stages {
         stage('Build') {
