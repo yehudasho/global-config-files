@@ -17,6 +17,12 @@ pipeline {
         JIRA_CREDENTIALS = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
     }
 
+
+  checkout scm
+    def a = load('a.groovy')
+    echo("${env.BUILD_NUMBER}")
+    echo("${a.LOADED_BUILD_NUMBER}")
+    
     stages {
         stage('Create Jira Issue') {
             steps {
