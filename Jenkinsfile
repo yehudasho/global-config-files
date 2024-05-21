@@ -20,7 +20,18 @@ pipeline {
         stage('Jira') { 
             steps {
                 sh 'echo create new jira issue'
-                jiraNewIssue site: "${JIRA_SITE}", projectKey: "${JIRA_PROJECT_KEY}", summary: "${ISSUE_SUMMARY}", description: "${ISSUE_DESCRIPTION}", type: 'Task'
+                // jiraNewIssue site: "${JIRA_SITE}", projectKey: "${JIRA_PROJECT_KEY}", summary: "${ISSUE_SUMMARY}", description: "${ISSUE_DESCRIPTION}", type: 'Task'
+                withCredentials([string(credentialsId: 'jira-api-token', variable: 'JIRA_API_TOKEN'),
+                                 string(credentialsId: 'jira-email', variable: 'JIRA_EMAIL')]) {
+                    script {
+                        def response = jiraNewIssue site: JIRA_SITE,
+                                                   projectKey: JIRA_PROJECT_KEY,
+                                                   summary: ISSUE_SUMMARY,
+                                                   description: ISSUE_DESCRIPTION,
+                                                   type: 'Task'
+
+                        echo "Created Jira issue: ${response.data.key}"
+                    }
             }
             post {
         success {
