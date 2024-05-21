@@ -66,7 +66,7 @@ def jsonSlurper = new JsonSlurper()
     def transitions = jsonSlurper.parseText(response)
 println "All Transitions: ${transitions}"
     for (transition in transitions.transitions) {
-        println "Transition: ${transition}"
+        println "Transition yehuda: ${transition}"
         if (transition.to.name == statusName) {
             return transition.id
         }
