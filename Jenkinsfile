@@ -31,7 +31,7 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                           }
                         }
                         """
-def getTransitionId(issueKey, statusName) {
+
                         // Write the payload to a temporary file
                         writeFile file: 'transition.json', text: payload
 
@@ -39,19 +39,7 @@ def getTransitionId(issueKey, statusName) {
                         sh """
                         curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
-def jsonSlurper = new JsonSlurper()
-    def transitions = jsonSlurper.parseText(response)
-println "All Transitions: ${transitions}"
 
-    for (transition in transitions.transitions) {
-        println "Transition: ${transition}"
-        if (transition.to.name == statusName) {
-            return transition.id
-        }
-    }
-
-    return null
-}
 
 
                         
@@ -71,4 +59,22 @@ println "All Transitions: ${transitions}"
             echo "Failed to transition Jira issue ${ISSUE_KEY}."
         }
     }
+}
+def getTransitionId(issueKey, statusName) {
+    // Execute the curl command to transition the Jira issue
+                        sh """
+                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        """
+def jsonSlurper = new JsonSlurper()
+    def transitions = jsonSlurper.parseText(response)
+println "All Transitions: ${transitions}"
+
+    for (transition in transitions.transitions) {
+        println "Transition: ${transition}"
+        if (transition.to.name == statusName) {
+            return transition.id
+        }
+    }
+
+    return null
 }
