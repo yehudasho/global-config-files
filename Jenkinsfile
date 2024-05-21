@@ -49,10 +49,10 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
 
     post {
         success {
-            echo "Jira issue ${ISSUE_KEY} transitioned successfully."
+            echo "Jira issue ${ISSUE_KEY} transitioned ${TRANSITION_ID} successfully."
         }
         failure {
-            echo "Failed to transition Jira issue ${ISSUE_KEY}."
+            echo "Failed to transition ${TRANSITION_ID} Jira issue ${ISSUE_KEY}."
         }
     }
 }
