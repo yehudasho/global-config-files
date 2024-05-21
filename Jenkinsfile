@@ -18,7 +18,8 @@ pipeline {
         DESCRIPTION = "${params.DESCRIPTION}"
         PRIORITY = "${params.PRIORITY}"
         JIRA_API_URL = 'http://172.17.0.3:8080/rest/api/2'
-        JIRA_AUTH_TOKEN = credentials('jira_cred')  // Use Jenkins credentials for Jira authentication
+        //JIRA_AUTH_TOKEN = credentials('jira_cred')  // Use Jenkins credentials for Jira authentication
+        JIRA_AUTH_TOKEN = 'jira_cred'
     }
 
     stages {
@@ -57,8 +58,7 @@ pipeline {
             when {
                 expression {
                     return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
-                    echo 'yehuda1 ${env.PROJECT_KEY}'
-                }
+                   }
             }
             steps {
                 script {
