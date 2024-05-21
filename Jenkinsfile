@@ -24,24 +24,26 @@ pipeline {
 
 withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
                     script {
-                        def payload = """
+                     def payload = """
                         {
-                          "priority": {
-                            "id": "${PRIORITY_ID}"
+                          "fields": {
+                            "priority": {
+                              "id": "${PRIORITY_ID}"
+                            }
                           }
                         }
                         """
 
                         // Write the payload to a temporary file
-                        writeFile file: 'priority.json', text: payload
+                        writeFile file: 'update_priority.json', text: payload
 
-                        // Execute the curl command to priority the Jira issue
+                        // Execute the curl command to update the Jira issue's priority
                         sh """
-                        curl -u $JIRA_EMAIL:$jira -X POST --data @priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        curl -u $JIRA_EMAIL:$JIRA_API_TOKEN -X PUT --data @update_priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY
                         """
                         
                         // Clean up the temporary file
-                        sh 'rm priority.json'
+                        sh 'rm update_priority.json'
                     }
                 }
             }
