@@ -23,7 +23,7 @@ pipeline {
                     echo "Creating a new Jira issue in project ${params.PROJECT_KEY}"
 
                     // Extract username and password from the credentials
-                    def jiraUsername = env.jira
+                  def jiraUsername = env.JIRA_USERNAME
                     def jiraPassword = env.jira
 
                     // Base64 encode the username and password for basic authentication
