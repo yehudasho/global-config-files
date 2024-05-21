@@ -2,7 +2,8 @@ pipeline {
     agent any
     environment {
         JIRA_URL = 'http://172.17.0.3:8080'  // Your Jira URL
-        ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
+        //ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
+        ISSUE_KEY = 'JIR-2'  // The key of the Jira issue to transition
         PRIORITY_ID = '1'
     }
     stages {
