@@ -31,7 +31,7 @@ pipeline {
                         }
                     } else {
                         println "Issue key not found in commit message."
-                        println "yehuda3 ${transitionId}"
+                        //println "yehuda3 ${transitionId}"
                     }
                 }
             }
@@ -45,11 +45,11 @@ def getTransitionId(issueKey, statusName) {
     def transitions = jsonSlurper.parseText(response)
 
     println "All Transitions: ${transitions}"
-    println "yehuda4 ${transitionId}"
+    //println "yehuda4 ${transitionId}"
 
     for (transition in transitions.transitions) {
         println "Transition: ${transition}"
-        println "yehuda5 ${transitionId}"
+        //println "yehuda5 ${transitionId}"
         if (transition.to.name == statusName) {
             return transition.id
                     }
