@@ -52,9 +52,7 @@ def getTransitionId(issueKey, statusName) {
         println "yehuda5 ${transitionId}"
         if (transition.to.name == statusName) {
             return transition.id
-            println "yehuda6 ${transitionId}"
-        }
+                    }
     }
-    println "yehuda7 ${transitionId}"
-    return null
+        return null
 }
