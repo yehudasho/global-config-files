@@ -5,6 +5,7 @@ pipeline {
         ISSUE_KEY = 'jira-integ-jenkins'  // The key of the Jira issue to transition
         TRANSITION_ID = 'JIR-2'  // The ID of the transition
         PROJECT_KEY = "${params.PROJECT_KEY}"
+         SUMMARY = "${params.SUMMARY}"
     }
     stages {
         stage('Build') {
@@ -46,11 +47,11 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                 }
 
                 sh 'echo yehuda1'
-                //when {
-               // expression {
-                 //   return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
-                //}
-            //}
+                when {
+                expression {
+                   return env.PROJECT_KEY?.trim() && env.SUMMARY?.trim()
+                }
+            }
                 
             }
         }
