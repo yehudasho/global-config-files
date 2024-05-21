@@ -62,9 +62,11 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
 }
 def getTransitionId(issueKey, statusName) {
     // Execute the curl command to transition the Jira issue
-                        sh """
-                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
-                        """
+//                        sh """
+  //                      curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+    //                    """
+def response = sh(script: "curl -u jira:jira -X GET -H 'Content-Type: application/json' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true).trim()
+
 def jsonSlurper = new JsonSlurper()
     def transitions = jsonSlurper.parseText(response)
 println "All Transitions: ${transitions}"
