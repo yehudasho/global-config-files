@@ -19,6 +19,7 @@ pipeline {
     stages {
         stage('Create Jira Issue') {
             steps {
+                withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
                 script {
                     echo "Creating a new Jira issue in project ${params.PROJECT_KEY}"
 
@@ -66,7 +67,7 @@ pipeline {
             }
         }
     }
-
+    }
     post {
         always {
             echo 'Pipeline complete'
