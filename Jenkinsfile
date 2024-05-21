@@ -17,7 +17,11 @@ pipeline {
                 sh 'echo my first jenkinsfile'
             }
         }
-        
+        stage('Jira') { 
+            steps {
+                sh 'echo create new jira issue'
+            }
+        }
     }
 }
 
