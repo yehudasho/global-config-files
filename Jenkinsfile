@@ -1,40 +1,59 @@
-import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.issue.MutableIssue
 pipeline {
     agent any
 
     // Define parameters
     parameters {
-        string(name: 'JIRA_JQL_QUERY', defaultValue: 'project = TEST AND status = "To Do"', description: 'JQL query to fetch Jira issues')
+        string(name: 'PROJECT_KEY', defaultValue: 'TEST', description: 'Jira project key where the issue will be created')
+        string(name: 'ISSUE_TYPE', defaultValue: 'Task', description: 'Type of the Jira issue to be created')
+        string(name: 'SUMMARY', defaultValue: 'New issue from Jenkins', description: 'Summary of the Jira issue')
+        string(name: 'DESCRIPTION', defaultValue: 'This issue was created by Jenkins pipeline.', description: 'Description of the Jira issue')
+        string(name: 'PRIORITY', defaultValue: 'Medium', description: 'Priority of the Jira issue')
     }
 
     // Set environment variables
     environment {
-        JIRA_JQL_QUERY = "${params.JIRA_JQL_QUERY}"
-        JIRA_API_URL = '172.17.0.3:8080/rest/api/2/search'
-        JIRA_CREDENTIALS = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
+        JIRA_API_URL = '172.17.0.3:8080/rest/api/2'
+        JIRA_CREDENTIALS = 'jira_cred'  // Use Jenkins credentials for Jira username and password
     }
 
     stages {
-        stage('Fetch Jira Issues') {
+        stage('Create Jira Issue') {
             steps {
                 script {
-                    echo "Fetching Jira issues with JQL query: ${env.JIRA_JQL_QUERY}"
+                    echo "Creating a new Jira issue in project ${params.PROJECT_KEY}"
 
                     // Extract username and password from the credentials
                     def jiraUsername = env.JIRA_CREDENTIALS_USR
                     def jiraPassword = env.JIRA_CREDENTIALS_PSW
 
                     // Base64 encode the username and password for basic authentication
-                    def authString = "${jira}:${jira}".bytes.encodeBase64().toString()
+                    def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
 
-                    // Construct the URL with the JQL query
-                    def apiUrl = "${env.JIRA_API_URL}?jql=${URLEncoder.encode(env.JIRA_JQL_QUERY, 'UTF-8')}"
+                    // Construct the JSON payload for creating the Jira issue
+                    def payload = """
+                    {
+                        "fields": {
+                            "project": {
+                                "key": "${params.PROJECT_KEY}"
+                            },
+                            "issuetype": {
+                                "name": "${params.ISSUE_TYPE}"
+                            },
+                            "summary": "${params.SUMMARY}",
+                            "description": "${params.DESCRIPTION}",
+                            "priority": {
+                                "name": "${params.PRIORITY}"
+                            }
+                        }
+                    }
+                    """
 
-                    // HTTP request to Jira API to fetch issues
+                    // HTTP request to Jira API to create a new issue
                     def response = httpRequest(
-                        url: apiUrl,
-                        httpMode: 'GET',
+                        url: "${env.JIRA_API_URL}/issue",
+                        httpMode: 'POST',
+                        contentType: 'APPLICATION_JSON',
+                        requestBody: payload,
                         customHeaders: [
                             [name: 'Authorization', value: "Basic ${authString}"],
                             [name: 'Content-Type', value: 'application/json']
@@ -42,13 +61,7 @@ pipeline {
                     )
 
                     def jsonResponse = readJSON text: response.content
-                    echo "Fetched Jira issues: ${jsonResponse}"
-
-                    // Process and display the issues
-                    def issues = jsonResponse.issues
-                    issues.each { issue ->
-                        echo "Issue Key: ${issue.key}, Summary: ${issue.fields.summary}, Status: ${issue.fields.status.name}"
-                    }
+                    echo "Created Jira issue: ${jsonResponse.key} - ${jsonResponse.fields.summary}"
                 }
             }
         }
