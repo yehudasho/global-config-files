@@ -24,11 +24,14 @@ pipeline {
                         if (transitionId != null) {
                             def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
                             println "Response: ${response}"
+                            println "yehuda1 ${transitionId}"
                         } else {
                             println "Transition ID not found for ${newStatus}."
+                            println "yehuda2 ${transitionId}"
                         }
                     } else {
                         println "Issue key not found in commit message."
+                        println "yehuda3 ${transitionId}"
                     }
                 }
             }
@@ -42,13 +45,16 @@ def getTransitionId(issueKey, statusName) {
     def transitions = jsonSlurper.parseText(response)
 
     println "All Transitions: ${transitions}"
+    println "yehuda4 ${transitionId}"
 
     for (transition in transitions.transitions) {
         println "Transition: ${transition}"
+        println "yehuda5 ${transitionId}"
         if (transition.to.name == statusName) {
             return transition.id
+            println "yehuda6 ${transitionId}"
         }
     }
-
+    println "yehuda7 ${transitionId}"
     return null
 }
