@@ -21,7 +21,7 @@ pipeline {
                 sh 'echo create new jira issue'
 
 
-withCredentials([usernamePassword(credentialsId: 'jira', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
+withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'jira')]) {
                     script {
                         def payload = """
                         {
