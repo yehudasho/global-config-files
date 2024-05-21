@@ -1,10 +1,9 @@
 pipeline {
     agent any
     environment {
-        JIRA_SITE = 'http://172.17.0.3:8080/'
-        JIRA_PROJECT_KEY = 'PROJ'
-        ISSUE_SUMMARY = 'New issue created from Jenkins'
-        ISSUE_DESCRIPTION = 'Description of the new issue'
+        JIRA_URL = 'http://172.17.0.3:8080'  // Your Jira URL
+        ISSUE_KEY = 'story-jira-integ-jenkins'  // The key of the Jira issue to transition
+        TRANSITION_ID = 'JIR-1'  // The ID of the transition
     }
     stages {
         stage('Build') {
@@ -20,29 +19,7 @@ pipeline {
         stage('Jira') { 
             steps {
                 sh 'echo create new jira issue'
-                // jiraNewIssue site: "${JIRA_SITE}", projectKey: "${JIRA_PROJECT_KEY}", summary: "${ISSUE_SUMMARY}", description: "${ISSUE_DESCRIPTION}", type: 'Task'
-                withCredentials([string(credentialsId: 'jira', variable: 'JIRA_API_TOKEN'),
-                                 string(credentialsId: 'jira-email', variable: 'JIRA_EMAIL')]) {
-                    script {
-                        def response = jiraNewIssue site: JIRA_SITE,
-                                                   projectKey: JIRA_PROJECT_KEY,
-                                                   summary: ISSUE_SUMMARY,
-                                                   description: ISSUE_DESCRIPTION,
-                                                   type: 'Task'
-
-                        echo "Created Jira issue: ${response.data.key}"
-                    }
-            }
-            }
-            post {
-        success {
-            echo "Jira issue created successfully."
-        }
-        failure {
-            echo "Failed to create Jira issue."
-        }
-    }
-        }
+                
         
 }
 }
