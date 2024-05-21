@@ -76,11 +76,5 @@ pipeline {
         failure {
             echo "Failed to update priority of Jira issue ${ISSUE_KEY}."
         }
+    }   
     }
-
-                
-            
-        
-    }
-}
-
