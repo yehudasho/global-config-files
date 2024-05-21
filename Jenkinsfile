@@ -1,3 +1,4 @@
+import groovy.transform.Field
 pipeline {
     agent any
 
