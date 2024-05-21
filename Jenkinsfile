@@ -24,7 +24,7 @@ pipeline {
 
                     // Extract username and password from the credentials
                   def jiraUsername = env.JIRA_USERNAME
-                    def jiraPassword = env.jira
+                  def jiraPassword = env.JIRA_PASSWORD
 
                     // Base64 encode the username and password for basic authentication
                     def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
