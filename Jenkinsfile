@@ -46,6 +46,37 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         // Clean up the temporary file
                         sh 'rm transition.json'
                     }
+
+    script {
+
+               def commitMessage = sh(script: "git log --format=%B -n 1 HEAD", returnStdout: true).trim()
+
+                    def index = commitMessage.indexOf(' ')
+
+                    def issueKey = commitMessage.substring(0, index)
+
+                    if (issueKey) {
+                        // Define the new status
+                        def newStatus = "Done"
+                        
+                        // Update status using REST API
+                        def transitionId = getTransitionId(issueKey, newStatus)
+                        println "Transition ID for ${newStatus}: ${transitionId}"
+
+                        if (transitionId != null) {
+                            def response = sh(script: "curl -u admin:admin -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://<ip_address>:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
+                            println "Response: ${response}"
+                        } else {
+                            println "Transition ID not found for ${newStatus}."
+                        }
+                    } else {
+                        println "Issue key not found in commit message."
+                    }
+                }
+            
+
+    }
+        
                 }
             }
         }
