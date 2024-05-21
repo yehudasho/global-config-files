@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        JIRA_SITE = 'http://127.0.0.1:8090/browse/'
+        JIRA_SITE = 'http://172.17.0.3:8080/'
         JIRA_PROJECT_KEY = 'PROJ'
         ISSUE_SUMMARY = 'New issue created from Jenkins'
         ISSUE_DESCRIPTION = 'Description of the new issue'
