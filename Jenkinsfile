@@ -33,6 +33,7 @@ pipeline {
                         echo "Created Jira issue: ${response.data.key}"
                     }
             }
+            }
             post {
         success {
             echo "Jira issue created successfully."
