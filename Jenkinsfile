@@ -24,7 +24,7 @@ pipeline {
                     script {
                         def response = sh (
                             script: """
-                                curl -u $JIRA_EMAIL:$jira -X GET -H "Content-Type: application/json" $JIRA_URL/rest/api/3/priority
+                                curl -u jira:$jira -X GET -H "Content-Type: application/json" http://172.17.0.3:8080/rest/api/3/priority
                             """,
                             returnStdout: true
                         ).trim()
