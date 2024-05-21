@@ -55,15 +55,6 @@ withCredentials([usernamePassword(credentialsId: 'jira-credentials', usernameVar
             echo "Failed to transition Jira issue ${ISSUE_KEY}."
         }
     }
-
-
-
-
-
-
-
-                
-            }
 }
 }
 }
