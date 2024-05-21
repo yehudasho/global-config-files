@@ -39,7 +39,8 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         sh """
                         curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
-
+def jsonSlurper = new JsonSlurper()
+    def transitions = jsonSlurper.parseText(response)
 println "All Transitions: ${transitions}"
 
     for (transition in transitions.transitions) {
