@@ -19,7 +19,7 @@ pipeline {
         DESCRIPTION = "${params.DESCRIPTION}"
         PRIORITY = "${params.PRIORITY}"
         JIRA_API_URL = 'http://172.17.0.3:8080/rest/api/2'
-        JIRA_CREDENTIALS = credentials('jira_cred')  // Use Jenkins credentials for Jira username and password
+        JIRA_CREDENTIALS = 'jira_cred'  // Use Jenkins credentials for Jira username and password
     }
 
     stages {
@@ -65,8 +65,8 @@ pipeline {
                     echo "Creating a new Jira issue in project ${env.PROJECT_KEY}"
 
                     // Extract username and password from the credentials
-                    def jiraUsername = env.jira
-                    def jiraPassword = env.jira
+                    def jiraUsername = "jira"
+                    def jiraPassword = "jira"
 
                     // Base64 encode the username and password for basic authentication
                     def authString = "${jiraUsername}:${jiraPassword}".bytes.encodeBase64().toString()
