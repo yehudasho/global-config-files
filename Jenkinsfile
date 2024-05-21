@@ -24,7 +24,7 @@ pipeline {
                     script {
                         def response = sh (
                             script: """
-                                curl -u $JIRA_EMAIL:$JIRA_API_TOKEN -X GET -H "Content-Type: application/json" $JIRA_URL/rest/api/3/priority
+                                curl -u $JIRA_EMAIL:$jira -X GET -H "Content-Type: application/json" $JIRA_URL/rest/api/3/priority
                             """,
                             returnStdout: true
                         ).trim()
@@ -60,7 +60,7 @@ pipeline {
 
                         // Execute the curl command to update the Jira issue's priority
                         sh """
-                        curl -u $JIRA_EMAIL:$JIRA_API_TOKEN -X PUT --data @update_priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY
+                        curl -u $JIRA_EMAIL:$jira -X PUT --data @update_priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY
                         """
                         
                         // Clean up the temporary file
