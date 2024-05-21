@@ -60,7 +60,7 @@ pipeline {
 
                         // Execute the curl command to update the Jira issue's priority
                         sh """
-                        curl -u $JIRA_EMAIL:$jira -X PUT --data @update_priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY
+                        curl -u $JIRA_EMAIL:jira -X PUT --data @update_priority.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY
                         """
                         
                         // Clean up the temporary file
