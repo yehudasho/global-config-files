@@ -72,8 +72,8 @@ sh 'echo create new jira issue Status'
                     }
                 }
             }
-        }
-    }
+       
+   
 }
             }
         }
