@@ -33,7 +33,7 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
                         writeFile file: 'transition.json', text: payload
                         // Execute the curl command to transition the Jira issue
                         sh """
-                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        curl -u jira:jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
                         
                         // Clean up the temporary file
@@ -62,7 +62,7 @@ sh 'echo create new jira issue Status'
                         println "Transition ID for ${newStatus}: ${transitionId}"
 
                         if (transitionId != null) {
-                            def response = sh(script: "curl -u admin:admin -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://<ip_address>:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
+                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
                             println "Response: ${response}"
                         } else {
                             println "Transition ID not found for ${newStatus}."
@@ -83,10 +83,10 @@ sh 'echo create new jira issue Status'
 def getTransitionId(issueKey, statusName) {
     // Execute the curl command to transition the Jira issue
                         sh """
-                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        curl -u jira:jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
 //                        sh """
-  //                      curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+  //                      curl -u jira:jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
     //                    """
 def response = sh(script: "curl -u jira:jira -X GET -H 'Content-Type: application/json' http://172.17.0.3:8080/rest/api/2/issue/${issueKey}/transitions", returnStdout: true).trim()
 
