@@ -56,5 +56,4 @@ withCredentials([usernamePassword(credentialsId: 'jira-credentials', usernameVar
         }
     }
 }
-}
-}
+
