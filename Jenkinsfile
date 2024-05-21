@@ -38,7 +38,7 @@ withCredentials([usernamePassword(credentialsId: 'jira_cred', usernameVariable: 
 
                         // Execute the curl command to transition the Jira issue
                         sh """
-                        curl -u $JIRA_EMAIL:$jira -X POST --data @transition.json -H "Content-Type: application/json" $JIRA_URL/rest/api/3/issue/$ISSUE_KEY/transitions
+                        curl -u jira:jira -X POST --data @transition.json -H "Content-Type: application/json" http://172.17.0.3:8080/rest/api/3/issue/$ISSUE_KEY/transitions
                         """
                         
                         // Clean up the temporary file
