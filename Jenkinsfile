@@ -30,7 +30,7 @@ pipeline {
                         println "Transition ID for ${newStatus}: ${transitionId}"
 
                         if (transitionId != null) {
-                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://localhost:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
+                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.2:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
                             println "Response: ${response}"
                         } else {
                             println "Transition ID not found for ${newStatus}."
