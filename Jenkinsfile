@@ -15,11 +15,7 @@ pipeline {
         stage('Update Status') {
             steps {
                 script {
-                    def commitMessage = sh(script: "git log --format=%B -n 1 HEAD", returnStdout: true).trim()
-
-                    //def index = commitMessage.indexOf(' ')
-
-                    def issueKey = "JIR-1"
+                    def issueKey = "jir-1"
 
                     if (issueKey) {
                         // Define the new status
@@ -30,7 +26,7 @@ pipeline {
                         println "Transition ID for ${newStatus}: ${transitionId}"
 
                         if (transitionId != null) {
-                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://172.17.0.2:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
+                            def response = sh(script: "curl -u jira:jira -X POST -H 'Content-Type: application/json' -d '{\"transition\": {\"id\": \"${transitionId}\"}}' http://localhost:8090/rest/api/2/issue/${issueKey}/transitions", returnStdout: true)
                             println "Response: ${response}"
                         } else {
                             println "Transition ID not found for ${newStatus}."
