@@ -1,14 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Start') {
             steps {
+                sh 'echo my start jenkinsfile'
+            }
+        }
+        stage('Check node version) { 
+            steps {
+                sh 'echo check ver of node'
                 sh '/usr/local/bin/node -v'
             }
         }
-        stage('Test') { 
+        stage('Build app') { 
             steps {
-                sh 'echo my first jenkinsfile'
+                sh 'echo build the app jj '
+                //sh '/usr/local/bin/node -v'
             }
         }
     }
