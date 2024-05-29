@@ -1,3 +1,4 @@
+//go to lesson of docker in order run images based on node
 pipeline {
     agent any
 
