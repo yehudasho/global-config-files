@@ -15,7 +15,6 @@ pipeline {
         stage('Build app') { 
             steps {
                 sh 'echo build the app jj '
-                //sh '/usr/local/bin/node -v'
             }
         }
     }
