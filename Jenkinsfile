@@ -11,5 +11,10 @@ pipeline {
                 sh '/usr/local/bin/node -v'
             }
         }
+        stage('Build') { 
+            steps {
+                sh '/usr/local/bin/node -v'
+            }
+        }
     }
 }
