@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Build') { 
             steps {
-                sh 'uname'
+                sh 'node /usr/local/bin/app.js'
             }
         }
     }
