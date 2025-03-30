@@ -1,17 +1,26 @@
+//go to lesson of docker in order run images based on node
 pipeline {
     agent any
+
     stages {
-        stage('Clone Repository') {
-            steps {
-                script {
-                    // Cloning the Git repository explicitly
-                    git url: 'https://github.com/yehudasho/global-config-files.git'
-                }
-            }
-        }
         stage('Build') {
             steps {
-                echo "Building the project..."
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+        stage('Security') {
+            steps {
+                echo 'Security....bla bla bla'
             }
         }
     }
