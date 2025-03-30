@@ -1,13 +1,17 @@
 pipeline {
-    agent {
-        docker { image 'python:3.9' }
-    }
+    agent any
     stages {
-        stage('Hello') {
+        stage('Clone Repository') {
             steps {
                 script {
-                    echo 'Hello, World!'
+                    // Cloning the Git repository explicitly
+                    git url: 'https://github.com/yehudasho/global-config-files.git'
                 }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Building the project..."
             }
         }
     }
