@@ -1,25 +1,14 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.9'
-            args '-u root'  // Optional: Run as root user inside the container
-        }
+        docker { image 'python:3.9' }
     }
-
     stages {
-        stage('Build') {
+        stage('Hello') {
             steps {
-                echo 'Building the application...'
-                sh 'python --version'
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh 'echo "Tests executed successfully"'
+                script {
+                    echo 'Hello, World!'
+                }
             }
         }
     }
 }
-
