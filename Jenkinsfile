@@ -1,26 +1,13 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'python:3.9' }
+    }
     stages {
-        stage('Start') {
+        stage('Hello') {
             steps {
-                sh 'echo Starting the pipilineof jenkinsfile'
-            }
-        }
-        stage('CheckNodeVer') { 
-            steps {
-                sh 'echo Checking the version of node'
-                sh '/usr/local/bin/node -v'
-            }
-        }
-        stage('Build') { 
-            steps {
-                sh 'echo Building the new app'
-                sh 'node /usr/local/bin/app.js'
-            }
-        }
-          stage('Finish') { 
-            steps {
-                sh 'echo Finishing the pipeline process '
+                script {
+                    echo 'Hello, World!'
+                }
             }
         }
     }
