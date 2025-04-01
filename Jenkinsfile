@@ -1,26 +1,32 @@
-//go to lesson of docker in order run images based on node
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9'  // Use Python 3.9 as the agent
+            args '--network=host --privileged' // Enable Docker-in-Docker
+        }
+    }
+
+    environment {
+        DOCKER_HOST = "tcp://docker-dind:2375" // Connect to DinD daemon
+    }
 
     stages {
-        stage('Build') {
+        stage('Check Environment') {
             steps {
-                echo 'Building..'
+                sh 'python --version'    // Verify Python 3.9
+                sh 'docker version'      // Check Docker access
             }
         }
-        stage('Test') {
+
+        stage('Build Docker Image') {
             steps {
-                echo 'Testing..'
+                sh 'docker build -t my-python-app .'  // Build the Docker image
             }
         }
-        stage('Deploy') {
+
+        stage('Run Container') {
             steps {
-                echo 'Deploying....'
-            }
-        }
-        stage('Security') {
-            steps {
-                echo 'Security....date is 01042025'
+                sh 'docker run --rm my-python-app'  // Run the Python container
             }
         }
     }
