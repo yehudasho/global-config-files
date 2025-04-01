@@ -1,5 +1,5 @@
-pipeline {
-    agent {
+pipeline { 
+    agent { 
         docker { image 'docker:latest' }
     }
     stages {
@@ -8,9 +8,14 @@ pipeline {
                 sh 'docker version'
             }
         }
-        stage('Run Python in Docker') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker run --rm python:3.9 python -c "print(\'Hello from Python in Docker!\')"'
+                sh 'docker build -t web-server .'
+            }
+        }
+        stage('Run Web Server') {
+            steps {
+                sh 'docker run -d -p 8000:8000 web-server'
             }
         }
     }
