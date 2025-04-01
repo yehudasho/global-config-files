@@ -1,32 +1,16 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.9'  // Use Python 3.9 as the agent
-            args '--network=host --privileged' // Enable Docker-in-Docker
-        }
+        docker { image 'docker:latest' }
     }
-
-    environment {
-        DOCKER_HOST = "tcp://docker-dind:2375" // Connect to DinD daemon
-    }
-
     stages {
-        stage('Check Environment') {
+        stage('Check Docker') {
             steps {
-                sh 'python --version'    // Verify Python 3.9
-                sh 'docker version'      // Check Docker access
+                sh 'docker version'
             }
         }
-
-        stage('Build Docker Image') {
+        stage('Run Python in Docker') {
             steps {
-                sh 'docker build -t my-python-app .'  // Build the Docker image
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                sh 'docker run --rm my-python-app'  // Run the Python container
+                sh 'docker run --rm python:3.9 python -c "print(\'Hello from Python in Docker!\')"'
             }
         }
     }
