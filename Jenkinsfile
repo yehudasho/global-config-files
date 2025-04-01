@@ -1,13 +1,26 @@
+//go to lesson of docker in order run images based on node
 pipeline {
-    agent {
-        docker { image 'python:3.9' }
-    }
+    agent any
+
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                script {
-                    echo 'Hello, World!'
-                }
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+        stage('Security') {
+            steps {
+                echo 'Security....bla bla bla'
             }
         }
     }
