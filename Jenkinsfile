@@ -1,16 +1,20 @@
 pipeline {
-    agent {
-        docker { image 'docker:latest' }
-    }
+    agent any
+
     stages {
-        stage('Check Docker') {
+        stage('Build') {
             steps {
-                sh 'docker version'
+                echo 'Building..'
             }
         }
-        stage('Run Python in Docker') {
+        stage('Test') {
             steps {
-                sh 'docker run --rm python:3.9 python -c "print(\'Hello from Python in Docker!\')"'
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
             }
         }
     }
