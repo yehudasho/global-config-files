@@ -1,20 +1,16 @@
 pipeline {
-    agent any
-
+    agent {
+        docker { image 'docker:latest' }
+    }
     stages {
-        stage('Build') {
+        stage('Check Docker') {
             steps {
-                echo 'Building..'
+                sh 'docker version'
             }
         }
-        stage('Test') {
+        stage('Run Python in Docker') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                sh 'docker run --rm python:3.9 python -c "print(\'Hello from Python in Docker Oleg class!\')"'
             }
         }
     }
