@@ -2,4 +2,4 @@
 #Exercise 01
 
 class_number = 1000
-print("\n the class number is:", class_number)TBD
+print("\n the class number is:", class_number)
