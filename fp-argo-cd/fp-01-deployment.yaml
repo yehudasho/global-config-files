@@ -25,12 +25,10 @@ kind: Service
 metadata:
   name: fp-app-01-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: fp-app-01
   ports:
-  - name: http2
-    port: 8081
-    targetPort: 8000
-    nodePort: 30002
-    protocol: TCP
+  - name: "fp-app-01"
+    port: 5000
+    targetPort: 80
