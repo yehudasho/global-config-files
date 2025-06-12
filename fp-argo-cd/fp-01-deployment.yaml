@@ -1,0 +1,36 @@
+# fp-01-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fp-app-01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fp-app-01
+  template:
+    metadata:
+      labels:
+        app: fp-app-01
+    spec:
+      containers:
+      - name: fp-app-01
+        image: dinghy123/fp-ci-app-node:latest
+        ports:
+        - containerPort: 8000
+---
+#fp-01-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fp-app-01-service
+spec:
+  type: NodePort
+  selector:
+    app: fp-app-01
+  ports:
+  - name: http2
+    port: 8081
+    targetPort: 8000
+    nodePort: 30002
+    protocol: TCP
