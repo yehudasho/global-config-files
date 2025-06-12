@@ -18,7 +18,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: "app-node"
+  - name: app-node
     port: 3000
     targetPort: 3000
   selector:
