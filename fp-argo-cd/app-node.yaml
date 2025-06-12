@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-node
+  labels:
+    app: app-node
+spec:
+  containers:
+  - image: 
+dinghy123/app-node:latest
+    name: app-node
+    ports:
+    - containerPort: 8082
