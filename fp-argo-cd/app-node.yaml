@@ -9,4 +9,4 @@ spec:
   - image: dinghy123/app-node:latest
     name: app-node
     ports:
-    - containerPort: 8082
+    - containerPort: 3000
