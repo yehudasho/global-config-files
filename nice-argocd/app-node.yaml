@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: app-node
-      image: dinghy123/app-node:latest-03
+      image: dinghy123/app-node:latest-04
       ports:
         - containerPort: 3000
 ---
