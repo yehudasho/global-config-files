@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Security') {
             steps {
-                echo 'Security....gm gm gm'
+                echo 'Security....this is the end of course yehhhhhhhhh'
             }
         }
     }
