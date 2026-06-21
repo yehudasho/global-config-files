@@ -16,7 +16,6 @@ kind: Service
 metadata:
   name: app-node
 spec:
-  type: LoadBalancer
   selector:
     app: app-node
   ports:
